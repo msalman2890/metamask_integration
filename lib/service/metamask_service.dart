@@ -31,7 +31,7 @@ abstract class MetaMaskService {
 
 class MetaMaskServiceImpl extends MetaMaskService {
   // deeplink url to open MetaMask app for authentication
-  String deepLinkUrl = 'metamask://wc?uri=';
+  String deepLinkUrl = '${metamaskAppUriScheme}wc?uri=';
 
   int oneEthInWei = 1000000000000000000;
 

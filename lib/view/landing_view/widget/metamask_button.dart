@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:metamask_wallet/core/utils/constants.dart';
 import 'package:metamask_wallet/core/utils/custom_loading.dart';
 import 'package:metamask_wallet/core/utils/custom_toast.dart';
+import 'package:metamask_wallet/core/utils/utils.dart';
 
 import '../../home_view/home_view.dart';
 import '../landing_view_model.dart';
@@ -32,11 +34,19 @@ class MetaMaskButton extends ConsumerWidget {
   Future<void> connectWallet(WidgetRef ref) async {
     Loading.show();
 
+    if (!await Utils.isAppInstalled(metamaskAppUriScheme)) {
+      Loading.hide();
+      CustomToast.show(launchError, true);
+      return;
+    }
+
     ref.listenManual(connectionProvider, (prev, next) {
       if (next.hasValue && next.value != null) {
         Loading.hide();
         Navigator.push(ref.context,
             MaterialPageRoute(builder: (context) => const HomeView()));
+      } else {
+        Loading.hide();
       }
     }, onError: (error, trace) {
       Loading.hide();
